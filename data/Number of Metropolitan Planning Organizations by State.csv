@@ -1,0 +1,580 @@
+State,Year,Metropolitan planning organizations
+Alabama,2015,14
+Alabama,2016,14
+Alabama,2017,14
+Alabama,2018,14
+Alabama,2020,12
+Alabama,2021,12
+Alabama,2022,12
+Alabama,2023,14
+Alabama,2024,14
+Alabama,2025,14
+Alabama,2026,14
+Alaska,2015,2
+Alaska,2016,2
+Alaska,2017,2
+Alaska,2018,2
+Alaska,2020,2
+Alaska,2021,2
+Alaska,2022,2
+Alaska,2023,2
+Alaska,2024,2
+Alaska,2025,3
+Alaska,2026,3
+Arizona,2015,8
+Arizona,2016,8
+Arizona,2017,8
+Arizona,2018,8
+Arizona,2020,8
+Arizona,2021,8
+Arizona,2022,8
+Arizona,2023,8
+Arizona,2024,8
+Arizona,2025,9
+Arizona,2026,9
+Arkansas,2015,8
+Arkansas,2016,8
+Arkansas,2017,8
+Arkansas,2018,8
+Arkansas,2020,7
+Arkansas,2021,7
+Arkansas,2022,7
+Arkansas,2023,8
+Arkansas,2024,8
+Arkansas,2025,8
+Arkansas,2026,8
+California,2015,19
+California,2016,19
+California,2017,19
+California,2018,19
+California,2020,17
+California,2021,17
+California,2022,17
+California,2023,18
+California,2024,18
+California,2025,18
+California,2026,18
+Colorado,2015,5
+Colorado,2016,5
+Colorado,2017,5
+Colorado,2018,5
+Colorado,2020,5
+Colorado,2021,5
+Colorado,2022,5
+Colorado,2023,5
+Colorado,2024,5
+Colorado,2025,5
+Colorado,2026,5
+Connecticut,2015,8
+Connecticut,2016,8
+Connecticut,2017,8
+Connecticut,2018,8
+Connecticut,2020,8
+Connecticut,2021,8
+Connecticut,2022,8
+Connecticut,2023,8
+Connecticut,2024,8
+Connecticut,2025,8
+Connecticut,2026,8
+Delaware,2015,3
+Delaware,2016,3
+Delaware,2017,3
+Delaware,2018,3
+Delaware,2020,3
+Delaware,2021,3
+Delaware,2022,2
+Delaware,2023,4
+Delaware,2024,4
+Delaware,2025,4
+Delaware,2026,4
+District of Columbia,2015,2
+District of Columbia,2016,2
+District of Columbia,2017,2
+District of Columbia,2018,2
+District of Columbia,2020,1
+District of Columbia,2021,1
+District of Columbia,2022,1
+District of Columbia,2023,2
+District of Columbia,2024,2
+District of Columbia,2025,2
+District of Columbia,2026,2
+Florida,2015,27
+Florida,2016,27
+Florida,2017,27
+Florida,2018,27
+Florida,2020,27
+Florida,2021,27
+Florida,2022,27
+Florida,2023,27
+Florida,2024,27
+Florida,2025,27
+Florida,2026,27
+Georgia,2015,16
+Georgia,2016,16
+Georgia,2017,16
+Georgia,2018,16
+Georgia,2020,15
+Georgia,2021,15
+Georgia,2022,15
+Georgia,2023,16
+Georgia,2024,16
+Georgia,2025,16
+Georgia,2026,16
+Hawaii,2015,2
+Hawaii,2016,2
+Hawaii,2017,2
+Hawaii,2018,2
+Hawaii,2020,2
+Hawaii,2021,2
+Hawaii,2022,2
+Hawaii,2023,2
+Hawaii,2024,2
+Hawaii,2025,2
+Hawaii,2026,2
+Idaho,2015,5
+Idaho,2016,5
+Idaho,2017,5
+Idaho,2018,5
+Idaho,2020,5
+Idaho,2021,5
+Idaho,2022,5
+Idaho,2023,5
+Idaho,2024,5
+Idaho,2025,6
+Idaho,2026,6
+Illinois,2015,15
+Illinois,2016,15
+Illinois,2017,15
+Illinois,2018,15
+Illinois,2020,11
+Illinois,2021,11
+Illinois,2022,11
+Illinois,2023,16
+Illinois,2024,16
+Illinois,2025,15
+Illinois,2026,15
+Indiana,2015,14
+Indiana,2016,14
+Indiana,2017,14
+Indiana,2018,14
+Indiana,2020,12
+Indiana,2021,12
+Indiana,2022,12
+Indiana,2023,14
+Indiana,2024,14
+Indiana,2025,14
+Indiana,2026,14
+Iowa,2015,9
+Iowa,2016,9
+Iowa,2017,9
+Iowa,2018,9
+Iowa,2020,8
+Iowa,2021,8
+Iowa,2022,8
+Iowa,2023,9
+Iowa,2024,9
+Iowa,2025,9
+Iowa,2026,9
+Kansas,2015,6
+Kansas,2016,6
+Kansas,2017,6
+Kansas,2018,6
+Kansas,2020,4
+Kansas,2021,4
+Kansas,2022,4
+Kansas,2023,5
+Kansas,2024,5
+Kansas,2025,5
+Kansas,2026,5
+Kentucky,2015,9
+Kentucky,2016,9
+Kentucky,2017,9
+Kentucky,2018,9
+Kentucky,2020,5
+Kentucky,2021,5
+Kentucky,2022,5
+Kentucky,2023,9
+Kentucky,2024,9
+Kentucky,2025,10
+Kentucky,2026,10
+Louisiana,2015,9
+Louisiana,2016,9
+Louisiana,2017,8
+Louisiana,2018,8
+Louisiana,2020,8
+Louisiana,2021,8
+Louisiana,2022,8
+Louisiana,2023,8
+Louisiana,2024,8
+Louisiana,2025,8
+Louisiana,2026,8
+Maine,2015,4
+Maine,2016,4
+Maine,2017,4
+Maine,2018,4
+Maine,2020,4
+Maine,2021,4
+Maine,2022,4
+Maine,2023,4
+Maine,2024,4
+Maine,2025,4
+Maine,2026,4
+Maryland,2015,6
+Maryland,2016,7
+Maryland,2017,7
+Maryland,2018,7
+Maryland,2020,4
+Maryland,2021,4
+Maryland,2022,5
+Maryland,2023,7
+Maryland,2024,7
+Maryland,2025,6
+Maryland,2026,6
+Massachusetts,2015,10
+Massachusetts,2016,10
+Massachusetts,2017,10
+Massachusetts,2018,10
+Massachusetts,2020,10
+Massachusetts,2021,10
+Massachusetts,2022,10
+Massachusetts,2023,10
+Massachusetts,2024,10
+Massachusetts,2025,10
+Massachusetts,2026,10
+Michigan,2015,13
+Michigan,2016,13
+Michigan,2017,13
+Michigan,2018,13
+Michigan,2020,13
+Michigan,2021,13
+Michigan,2022,13
+Michigan,2023,13
+Michigan,2024,14
+Michigan,2025,14
+Michigan,2026,14
+Minnesota,2015,8
+Minnesota,2016,8
+Minnesota,2017,8
+Minnesota,2018,8
+Minnesota,2020,5
+Minnesota,2021,5
+Minnesota,2022,5
+Minnesota,2023,8
+Minnesota,2024,8
+Minnesota,2025,8
+Minnesota,2026,8
+Mississippi,2015,4
+Mississippi,2016,4
+Mississippi,2017,4
+Mississippi,2018,4
+Mississippi,2020,3
+Mississippi,2021,3
+Mississippi,2022,3
+Mississippi,2023,4
+Mississippi,2024,4
+Mississippi,2025,4
+Mississippi,2026,4
+Missouri,2015,8
+Missouri,2016,8
+Missouri,2017,8
+Missouri,2018,8
+Missouri,2020,8
+Missouri,2021,8
+Missouri,2022,8
+Missouri,2023,9
+Missouri,2024,9
+Missouri,2025,9
+Missouri,2026,9
+Montana,2015,3
+Montana,2016,3
+Montana,2017,3
+Montana,2018,3
+Montana,2020,3
+Montana,2021,3
+Montana,2022,3
+Montana,2023,3
+Montana,2024,3
+Montana,2025,5
+Montana,2026,5
+Nebraska,2015,4
+Nebraska,2016,4
+Nebraska,2017,4
+Nebraska,2018,4
+Nebraska,2020,3
+Nebraska,2021,3
+Nebraska,2022,3
+Nebraska,2023,4
+Nebraska,2024,4
+Nebraska,2025,4
+Nebraska,2026,4
+Nevada,2015,4
+Nevada,2016,4
+Nevada,2017,4
+Nevada,2018,4
+Nevada,2020,4
+Nevada,2021,4
+Nevada,2022,4
+Nevada,2023,4
+Nevada,2024,4
+Nevada,2025,4
+Nevada,2026,4
+New Hampshire,2015,4
+New Hampshire,2016,4
+New Hampshire,2017,4
+New Hampshire,2018,4
+New Hampshire,2020,4
+New Hampshire,2021,4
+New Hampshire,2022,4
+New Hampshire,2023,4
+New Hampshire,2024,4
+New Hampshire,2025,4
+New Hampshire,2026,4
+New Jersey,2015,3
+New Jersey,2016,3
+New Jersey,2017,3
+New Jersey,2018,3
+New Jersey,2020,2
+New Jersey,2021,2
+New Jersey,2022,2
+New Jersey,2023,3
+New Jersey,2024,3
+New Jersey,2025,3
+New Jersey,2026,3
+New Mexico,2015,5
+New Mexico,2016,5
+New Mexico,2017,5
+New Mexico,2018,5
+New Mexico,2020,4
+New Mexico,2021,4
+New Mexico,2022,4
+New Mexico,2023,5
+New Mexico,2024,5
+New Mexico,2025,5
+New Mexico,2026,5
+New York,2015,14
+New York,2016,14
+New York,2017,14
+New York,2018,14
+New York,2020,14
+New York,2021,14
+New York,2022,14
+New York,2023,14
+New York,2024,14
+New York,2025,14
+New York,2026,14
+North Carolina,2015,19
+North Carolina,2016,19
+North Carolina,2017,19
+North Carolina,2018,19
+North Carolina,2020,18
+North Carolina,2021,18
+North Carolina,2022,18
+North Carolina,2023,18
+North Carolina,2024,18
+North Carolina,2025,19
+North Carolina,2026,19
+North Dakota,2015,3
+North Dakota,2016,3
+North Dakota,2017,3
+North Dakota,2018,3
+North Dakota,2020,3
+North Dakota,2021,3
+North Dakota,2022,3
+North Dakota,2023,3
+North Dakota,2024,3
+North Dakota,2025,4
+North Dakota,2026,4
+Ohio,2015,17
+Ohio,2016,17
+Ohio,2017,17
+Ohio,2018,17
+Ohio,2020,14
+Ohio,2021,14
+Ohio,2022,14
+Ohio,2023,17
+Ohio,2024,17
+Ohio,2025,17
+Ohio,2026,17
+Oklahoma,2015,4
+Oklahoma,2016,4
+Oklahoma,2017,4
+Oklahoma,2018,4
+Oklahoma,2020,3
+Oklahoma,2021,3
+Oklahoma,2022,3
+Oklahoma,2023,4
+Oklahoma,2024,4
+Oklahoma,2025,5
+Oklahoma,2026,5
+Oregon,2015,10
+Oregon,2016,10
+Oregon,2017,10
+Oregon,2018,10
+Oregon,2020,8
+Oregon,2021,8
+Oregon,2022,8
+Oregon,2023,10
+Oregon,2024,10
+Oregon,2025,10
+Oregon,2026,10
+Pennsylvania,2015,19
+Pennsylvania,2016,19
+Pennsylvania,2017,19
+Pennsylvania,2018,19
+Pennsylvania,2020,19
+Pennsylvania,2021,19
+Pennsylvania,2022,19
+Pennsylvania,2023,20
+Pennsylvania,2024,20
+Pennsylvania,2025,20
+Pennsylvania,2026,20
+Puerto Rico,2020,1
+Puerto Rico,2021,1
+Puerto Rico,2022,1
+Puerto Rico,2023,1
+Puerto Rico,2024,1
+Puerto Rico,2025,1
+Puerto Rico,2026,1
+Rhode Island,2015,1
+Rhode Island,2016,1
+Rhode Island,2017,1
+Rhode Island,2018,1
+Rhode Island,2020,1
+Rhode Island,2021,1
+Rhode Island,2022,1
+Rhode Island,2023,1
+Rhode Island,2024,1
+Rhode Island,2025,1
+Rhode Island,2026,1
+South Carolina,2015,11
+South Carolina,2016,11
+South Carolina,2017,11
+South Carolina,2018,11
+South Carolina,2020,10
+South Carolina,2021,10
+South Carolina,2022,10
+South Carolina,2023,11
+South Carolina,2024,11
+South Carolina,2025,11
+South Carolina,2026,11
+South Dakota,2015,3
+South Dakota,2016,3
+South Dakota,2017,3
+South Dakota,2018,3
+South Dakota,2020,2
+South Dakota,2021,2
+South Dakota,2022,2
+South Dakota,2023,3
+South Dakota,2024,3
+South Dakota,2025,3
+South Dakota,2026,3
+Tennessee,2015,11
+Tennessee,2016,11
+Tennessee,2017,11
+Tennessee,2018,11
+Tennessee,2020,11
+Tennessee,2021,11
+Tennessee,2022,11
+Tennessee,2023,11
+Tennessee,2024,11
+Tennessee,2025,11
+Tennessee,2026,11
+Texas,2015,25
+Texas,2016,25
+Texas,2017,25
+Texas,2018,25
+Texas,2020,25
+Texas,2021,23
+Texas,2022,23
+Texas,2023,23
+Texas,2024,23
+Texas,2025,24
+Texas,2026,24
+United States,2015,404
+United States,2016,405
+United States,2017,404
+United States,2018,404
+United States,2020,404
+United States,2021,402
+United States,2022,402
+United States,2023,450
+United States,2024,451
+United States,2025,459
+United States,2026,459
+Utah,2015,4
+Utah,2016,4
+Utah,2017,4
+Utah,2018,4
+Utah,2020,4
+Utah,2021,4
+Utah,2022,4
+Utah,2023,4
+Utah,2024,4
+Utah,2025,4
+Utah,2026,4
+Vermont,2015,1
+Vermont,2016,1
+Vermont,2017,1
+Vermont,2018,1
+Vermont,2020,1
+Vermont,2021,1
+Vermont,2022,1
+Vermont,2023,1
+Vermont,2024,1
+Vermont,2025,1
+Vermont,2026,1
+Virginia,2015,15
+Virginia,2016,15
+Virginia,2017,15
+Virginia,2018,15
+Virginia,2020,12
+Virginia,2021,12
+Virginia,2022,12
+Virginia,2023,15
+Virginia,2024,15
+Virginia,2025,15
+Virginia,2026,15
+Washington,2015,12
+Washington,2016,12
+Washington,2017,12
+Washington,2018,12
+Washington,2020,11
+Washington,2021,11
+Washington,2022,11
+Washington,2023,12
+Washington,2024,12
+Washington,2025,12
+Washington,2026,12
+West Virginia,2015,8
+West Virginia,2016,8
+West Virginia,2017,8
+West Virginia,2018,8
+West Virginia,2020,6
+West Virginia,2021,6
+West Virginia,2022,6
+West Virginia,2023,8
+West Virginia,2024,8
+West Virginia,2025,8
+West Virginia,2026,8
+Wisconsin,2015,14
+Wisconsin,2016,14
+Wisconsin,2017,14
+Wisconsin,2018,14
+Wisconsin,2020,12
+Wisconsin,2021,12
+Wisconsin,2022,12
+Wisconsin,2023,14
+Wisconsin,2024,14
+Wisconsin,2025,14
+Wisconsin,2026,14
+Wyoming,2015,2
+Wyoming,2016,2
+Wyoming,2017,2
+Wyoming,2018,2
+Wyoming,2020,2
+Wyoming,2021,2
+Wyoming,2022,2
+Wyoming,2023,2
+Wyoming,2024,2
+Wyoming,2025,2
+Wyoming,2026,2
