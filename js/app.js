@@ -149,6 +149,19 @@ KY.App = (function () {
     // ── Update overview KPIs
     updateOverviewKPIs(F, S);
   }
+     function getNumericField(row, keys) {
+  if (!row) return null;
+  for (const k of keys) {
+    if (row[k] != null && (''+row[k]).trim() !== '') {
+      const v = parseFloat((''+row[k]).replace(/,/g,''));
+      if (!isNaN(v)) return v;
+    }
+  }
+  return null;
+}
+function yearVal(row) {
+  return + (row['Year of Year'] || row['Year'] || 0);
+}
 
   /* ── Overview KPI tiles from live data ───────────────────── */
   function updateOverviewKPIs(F, S) {
