@@ -156,21 +156,28 @@ KY.App = (function () {
     const fmt = KY.Charts.fmt;
 
     // Roads & bridges from railroadMiles state file
-    const roadsLatest = S.railroadMiles
-      .filter(r=>(r['Measure']||'').trim()==='Miles of public road')
-      .sort((a,b)=>+b['Year']-+a['Year'])[0];
-    const bridgesLatest = S.railroadMiles
-      .filter(r=>(r['Measure']||'').trim()==='Bridges')
-      .sort((a,b)=>+b['Year']-+a['Year'])[0];
+   // Roads
+const roadsLatest = S.railroadMiles
+  .filter(r => (r['Measure']||'').trim() === 'Miles of public road')
+  .sort((a,b) => yearVal(b) - yearVal(a))[0];
+const roadsVal = getNumericField(roadsLatest, ['Value','Values','Measure Values']);
+if (roadsVal != null) set('kpi_roads', fmt(roadsVal));
 
-    if(roadsLatest)  set('kpi_roads',   fmt(parseFloat((roadsLatest['Value']+'').replace(/,/g,''))));
-    if(bridgesLatest)set('kpi_bridges', fmt(parseFloat((bridgesLatest['Value']+'').replace(/,/g,''))));
+// Bridges
+const bridgesLatest = S.railroadMiles
+  .filter(r => (r['Measure']||'').trim() === 'Bridges')
+  .sort((a,b) => yearVal(b) - yearVal(a))[0];
+const bridgesVal = getNumericField(bridgesLatest, ['Value','Values','Measure Values']);
+if (bridgesVal != null) set('kpi_bridges', fmt(bridgesVal));
+
 
     // VMT
     const vmtLatest = S.vmtByState
-      .filter(r=>(r['Measures']||'').trim()==='Highway vehicle-miles traveled (millions)')
-      .sort((a,b)=>+b['Year of Year']-+a['Year of Year'])[0];
-    if(vmtLatest) set('kpi_vmt', fmt(parseFloat((vmtLatest['Values']+'').replace(/,/g,'')))+' M mi');
+  .filter(r => (r['Measures']||'').trim() === 'Highway vehicle-miles traveled (millions)')
+  .sort((a,b) => yearVal(b) - yearVal(a))[0];
+const vmtVal = getNumericField(vmtLatest, ['Values','Value']);
+if (vmtVal != null) set('kpi_vmt', fmt(vmtVal) + ' M mi');
+
 
     // Freight facilities (filtered)
     set('kpi_freight_fac', fmt(F.freightUsers.length)+' fac.');
