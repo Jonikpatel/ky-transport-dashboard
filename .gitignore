@@ -1,0 +1,38 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# Node (if using local server tools)
+node_modules/
+npm-debug.log*
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains
+.idea/
+*.iml
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+
+# Python cache (if using python -m http.server)
+__pycache__/
+*.pyc
+
+# Keep data folder tracked but ignore large temp files
+data/*.tmp
+data/*.bak

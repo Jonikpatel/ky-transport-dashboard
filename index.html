@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Kentucky Transportation at a Glance</title>
+<link rel="stylesheet" href="css/dashboard.css"/>
+<!-- External libraries via CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<!-- ════════════ LOADING SCREEN ════════════ -->
+<div id="loader">
+  <div class="loader-logo">KY</div>
+  <div class="loader-title">Loading Transportation Data…</div>
+  <div class="loader-bar"><div id="loadProgress"></div></div>
+  <div id="loadText">Initializing…</div>
+</div>
+
+<!-- ════════════ DASHBOARD ════════════ -->
+<div id="dashboard" style="display:none">
+
+<header>
+  <div class="h-left">
+    <div class="logo">KY</div>
+    <div>
+      <div class="h-title">Transportation at a Glance — Kentucky</div>
+      <div class="h-sub">BTS · KYTC · FHWA · FAA · NHTSA · USACE · 27 Data Sources</div>
+    </div>
+  </div>
+  <div class="h-right">
+    <div class="pulse"></div>
+    <div class="badge b-green">Live CSV Data</div>
+    <div class="badge b-blue">All 27 Files</div>
+    <div class="badge b-teal">DOT / BTS</div>
+  </div>
+</header>
+
+<!-- Filter Bar -->
+<div class="filter-bar">
+  <div class="filter-group">
+    <label>🏙️ District</label>
+    <select class="filter-select" id="districtSel">
+      <option value="">All Districts</option>
+    </select>
+  </div>
+  <div class="filter-divider"></div>
+  <div class="filter-group">
+    <label>📍 County</label>
+    <select class="filter-select" id="countySel">
+      <option value="">All Counties</option>
+    </select>
+  </div>
+  <button class="clear-btn" id="clearBtn">✕ Clear</button>
+  <div class="filter-badge" id="filterBadge"></div>
+  <div class="filter-info" id="filterInfo">
+    <span class="pulse" style="width:5px;height:5px"></span>
+    Showing statewide data
+  </div>
+  <div class="filter-note">
+    💡 Charts marked <span class="statewide-note">🌐 Statewide</span> always show all-Kentucky data
+  </div>
+</div>
+
+<nav>
+  <div class="tab active" data-p="overview">📊 Overview</div>
+  <div class="tab" data-p="mobility">🚗 Daily Mobility</div>
+  <div class="tab" data-p="infrastructure">🏗️ Infrastructure</div>
+  <div class="tab" data-p="freight">🚛 Freight</div>
+  <div class="tab" data-p="rail">🚂 Rail Network</div>
+  <div class="tab" data-p="aviation">✈️ Aviation</div>
+  <div class="tab" data-p="waterways">⚓ Waterways & Ports</div>
+  <div class="tab" data-p="transit">🚌 Transit & Travel</div>
+  <div class="tab" data-p="active">🚴 Active & Alternate</div>
+  <div class="tab" data-p="commute">👔 Commute</div>
+  <div class="tab" data-p="safety">⚠️ Safety</div>
+</nav>
+
+<main>
+
+<!-- ════ OVERVIEW ════ -->
+<div class="page active" id="page-overview">
+  <div class="kgrid k5">
+    <div class="kpi" style="--kc:#3b82f6"><span class="ki">🛣️</span><div class="kv" id="kpi_roads">—</div><div class="kl">Public Road Miles</div><div class="kd nu">FHWA</div></div>
+    <div class="kpi" style="--kc:#22d3ee"><span class="ki">🌉</span><div class="kv" id="kpi_bridges">—</div><div class="kl">Public Bridges</div><div class="kd up">↑ since 2010</div></div>
+    <div class="kpi" style="--kc:#22c55e"><span class="ki">🚗</span><div class="kv" id="kpi_vmt">—</div><div class="kl">VMT (Miles/Year)</div><div class="kd up">FHWA</div></div>
+    <div class="kpi" style="--kc:#fbbf24"><span class="ki">🚛</span><div class="kv" id="kpi_freight_fac">—</div><div class="kl">Freight Facilities</div><div class="kd nu">KYTC KBIF</div></div>
+    <div class="kpi" style="--kc:#a78bfa"><span class="ki">✈️</span><div class="kv" id="kpi_airports">—</div><div class="kl">Airports & Heliports</div><div class="kd nu">FAA</div></div>
+  </div>
+  <div class="kgrid k5">
+    <div class="kpi" style="--kc:#fb923c"><span class="ki">🚂</span><div class="kv" id="kpi_rail">—</div><div class="kl">Rail Miles</div><div class="kd nu">KYTC Active</div></div>
+    <div class="kpi" style="--kc:#22d3ee"><span class="ki">⚓</span><div class="kv" id="kpi_prv_ports">—</div><div class="kl">Private Port Docks</div><div class="kd nu">KYTC</div></div>
+    <div class="kpi" style="--kc:#22c55e"><span class="ki">🚌</span><div class="kv" id="kpi_transit">—</div><div class="kl">Transit Riders (Latest)</div><div class="kd up">NTD</div></div>
+    <div class="kpi" style="--kc:#f472b6"><span class="ki">🚴</span><div class="kv" id="kpi_bike">—</div><div class="kl">Bicycle Route Miles</div><div class="kd nu">KYTC</div></div>
+    <div class="kpi" style="--kc:#f87171"><span class="ki">⚠️</span><div class="kv" id="kpi_fatalities">—</div><div class="kl">Traffic Fatalities (Latest)</div><div class="kd dn">NHTSA</div></div>
+  </div>
+  <div class="sh">System Snapshot</div>
+  <div class="g g3">
+    <div class="card"><div class="card-h"><div class="ct">VMT Trend<span class="statewide-note">🌐 Statewide</span></div><div class="cb">FHWA</div></div><div class="cw" style="height:170px"><canvas id="ov_vmt"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Top Freight Commodities by Value<span class="statewide-note">🌐 Statewide</span></div><div class="cb">FAF</div></div><div class="cw" style="height:170px"><canvas id="ov_freight"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Rail Mileage by Operator</div><div class="cb">KYTC ACTIVE · FILTERED</div></div><div class="cw" style="height:170px"><canvas id="ov_rail"></canvas></div></div>
+  </div>
+  <div class="g g32">
+    <div class="card"><div class="card-h"><div class="ct">Airport Enplanements<span class="statewide-note">🌐 Statewide</span></div><div class="cb">FAA T-100</div></div><div class="cw" style="height:170px"><canvas id="ov_airports"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Multimodal Summary</div><div class="cb">ALL SOURCES</div></div>
+      <div class="slist" style="margin-top:4px">
+        <div class="srow" style="--kc:#3b82f6"><span class="sl">🛣️ Public Road Miles</span><span class="sv" id="kpi_roads2">—</span></div>
+        <div class="srow" style="--kc:#22d3ee"><span class="sl">🌉 Public Bridges</span><span class="sv" id="kpi_bridges2">—</span></div>
+        <div class="srow" style="--kc:#fb923c"><span class="sl">🚂 Active Rail Miles (filtered)</span><span class="sv" id="kpi_rail2">—</span></div>
+        <div class="srow" style="--kc:#22c55e"><span class="sl">⚓ Navigable Waterway Miles</span><span class="sv">1,590</span></div>
+        <div class="srow" style="--kc:#a78bfa"><span class="sl">✈️ Airports + Heliports (filtered)</span><span class="sv" id="kpi_airports2">—</span></div>
+        <div class="srow" style="--kc:#f472b6"><span class="sl">🚴 Bicycle Route Miles (filtered)</span><span class="sv" id="kpi_bike2">—</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ DAILY MOBILITY ════ -->
+<div class="page" id="page-mobility">
+  <div class="kgrid k4">
+    <div class="kpi" style="--kc:#3b82f6"><span class="ki">🏘️</span><div class="kv">3.54M</div><div class="kl">Avg Daily Traveling (KY)</div><div class="kd nu">BTS TRIPS 2024</div></div>
+    <div class="kpi" style="--kc:#22c55e"><span class="ki">🏠</span><div class="kv">924K</div><div class="kl">Avg Staying Home Daily</div><div class="kd nu">State Level</div></div>
+    <div class="kpi" style="--kc:#fbbf24"><span class="ki">🔄</span><div class="kv">19.9M</div><div class="kl">Avg Daily Trips Statewide</div><div class="kd dn">↓ Apr vs Jan</div></div>
+    <div class="kpi" style="--kc:#a78bfa"><span class="ki">📍</span><div class="kv">120</div><div class="kl">Counties Tracked</div><div class="kd nu">BTS</div></div>
+  </div>
+  <div class="sh">Monthly Patterns — filtered by county</div>
+  <div class="g g2">
+    <div class="card"><div class="card-h"><div class="ct">Population: Traveling vs. At Home</div><div class="cb">BTS TRIPS · FILTERED</div></div><div class="cw" style="height:210px"><canvas id="mob_hometravel"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Total Daily Trips</div><div class="cb">BTS TRIPS · FILTERED</div></div><div class="cw" style="height:210px"><canvas id="mob_trips"></canvas></div></div>
+  </div>
+  <div class="sh">County & Distance</div>
+  <div class="g g32">
+    <div class="card"><div class="card-h"><div class="ct">Top Counties — Avg Daily Trips</div><div class="cb">FILTERED</div></div><div class="cw" style="height:240px"><canvas id="mob_counties"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Trip Distance Distribution<span class="statewide-note">🌐 Statewide</span></div><div class="cb">BTS</div></div><div class="cw" style="height:240px"><canvas id="mob_dist"></canvas></div></div>
+  </div>
+</div>
+
+<!-- ════ INFRASTRUCTURE ════ -->
+<div class="page" id="page-infrastructure">
+  <div class="kgrid k4">
+    <div class="kpi" style="--kc:#3b82f6"><span class="ki">🛣️</span><div class="kv" id="kpi_roads3">—</div><div class="kl">Public Road Miles 2024</div><div class="kd nu">FHWA</div></div>
+    <div class="kpi" style="--kc:#22c55e"><span class="ki">🌉</span><div class="kv" id="kpi_bridges3">—</div><div class="kl">Bridges 2025</div><div class="kd up">↑ since 2010</div></div>
+    <div class="kpi" style="--kc:#fb923c"><span class="ki">🚗</span><div class="kv">4.0M</div><div class="kl">Registered Vehicles 2023</div><div class="kd nu">FHWA</div></div>
+    <div class="kpi" style="--kc:#22d3ee"><span class="ki">🪪</span><div class="kv">3.0M</div><div class="kl">Licensed Drivers 2023</div><div class="kd nu">FHWA</div></div>
+  </div>
+  <div class="sh">Asset Trends<span class="statewide-note" style="margin-left:8px">🌐 Statewide — not affected by filter</span></div>
+  <div class="g g2">
+    <div class="card"><div class="card-h"><div class="ct">Roads & Bridges (2010–2025)</div><div class="cb">FHWA BTS</div></div><div class="cw" style="height:210px"><canvas id="inf_roads"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">VMT, Drivers & Vehicles</div><div class="cb">FHWA</div></div><div class="cw" style="height:210px"><canvas id="inf_drivers"></canvas></div></div>
+  </div>
+  <div class="sh">Road Condition — IRI<span class="statewide-note" style="margin-left:8px">🌐 Statewide</span></div>
+  <div class="g g32">
+    <div class="card"><div class="card-h"><div class="ct">IRI Condition by Road Class</div><div class="cb">HPMS 2023</div></div><div class="cw" style="height:210px"><canvas id="inf_iri"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Overall Acceptability</div><div class="cb">NHS MILES</div></div>
+      <div style="text-align:center;padding:10px 0 8px">
+        <div id="roadPctVal" style="font-family:'Syne',sans-serif;font-size:52px;font-weight:800;color:#22c55e;line-height:1">—%</div>
+        <div style="font-size:11px;color:var(--t3);margin:6px 0 12px">Acceptable NHS Road Miles</div>
+      </div>
+      <div class="cw" style="height:120px"><canvas id="inf_gauge"></canvas></div>
+    </div>
+  </div>
+  <div class="sh">Capital Investment 2024–2030<span class="statewide-note" style="margin-left:8px">🌐 Static reference</span></div>
+  <div class="g g2">
+    <div class="card"><div class="card-h"><div class="ct">Funding by Program ($B)</div><div class="cb">KYTC SHP</div></div><div class="cw" style="height:180px"><canvas id="inf_funding"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Program Highlights</div><div class="cb">KYTC 2024–30</div></div>
+      <div class="slist">
+        <div class="srow" style="--kc:#3b82f6"><span class="sl">🏛️ Federal (IIJA + FAH)</span><span class="sv">$6.4B</span></div>
+        <div class="srow" style="--kc:#22c55e"><span class="sl">🏢 State Road Fund + Bonds</span><span class="sv">$1.4B</span></div>
+        <div class="srow" style="--kc:#22d3ee"><span class="sl">🌉 Bridge Replacement (IIJA)</span><span class="sv">$1.5B</span></div>
+        <div class="srow" style="--kc:#fbbf24"><span class="sl">🌱 High-Growth Counties</span><span class="sv">$450M</span></div>
+        <div class="srow" style="--kc:#a78bfa"><span class="sl">🚌 Transit Capital</span><span class="sv">$180M</span></div>
+        <div class="srow" style="--kc:#fb923c"><span class="sl">⚡ NEVI EV Fast Charging</span><span class="sv">$70M</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ FREIGHT ════ -->
+<div class="page" id="page-freight">
+  <div class="kgrid k4">
+    <div class="kpi" style="--kc:#fb923c"><span class="ki">🏭</span><div class="kv" id="kpi_freight_fac2">—</div><div class="kl">Freight Facilities (filtered)</div><div class="kd nu">KYTC KBIF</div></div>
+    <div class="kpi" style="--kc:#fbbf24"><span class="ki">💰</span><div class="kv">$75.3B</div><div class="kl">Motor Vehicles Value<span class="statewide-note">🌐</span></div><div class="kd up">#1 Commodity</div></div>
+    <div class="kpi" style="--kc:#22d3ee"><span class="ki">⛏️</span><div class="kv">75.4M</div><div class="kl">Coal Tons<span class="statewide-note">🌐</span></div><div class="kd up">#1 by Volume</div></div>
+    <div class="kpi" style="--kc:#a78bfa"><span class="ki">🅿️</span><div class="kv" id="pk_fac_val">—</div><div class="kl">Truck Parking Facilities (filtered)</div><div class="kd nu">KYTC</div></div>
+  </div>
+  <div class="sh">Commodity Flows<span class="statewide-note" style="margin-left:8px">🌐 Statewide — FAF state aggregates</span></div>
+  <div class="g g2">
+    <div class="card"><div class="card-h"><div class="ct">Top Commodities by Value ($M)</div><div class="cb">FAF 2023 · STATEWIDE</div></div><div class="cw" style="height:240px"><canvas id="fr_val"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Top Commodities by Volume (K Tons)</div><div class="cb">FAF 2023 · STATEWIDE</div></div><div class="cw" style="height:240px"><canvas id="fr_tons"></canvas></div></div>
+  </div>
+  <div class="sh">District & County Activity — responds to filter</div>
+  <div class="g g2">
+    <div class="card"><div class="card-h"><div class="ct">Facilities & Avg Trucks by District</div><div class="cb">KYTC KBIF · FILTERED</div></div><div class="cw" style="height:230px"><canvas id="fr_district"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Top Counties — Facilities & Trucks</div><div class="cb">FILTERED</div></div>
+      <table class="tbl"><thead><tr><th>#</th><th>County</th><th>Facilities</th><th>Bar</th><th>Trucks/Day</th></tr></thead><tbody id="fr_tbl"></tbody></table>
+    </div>
+  </div>
+  <div class="sh">Truck Parking — responds to filter</div>
+  <div class="g g2">
+    <div class="card"><div class="card-h"><div class="ct">Parking Spaces by District</div><div class="cb">FILTERED</div></div><div class="cw" style="height:200px"><canvas id="fr_parking"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Facility Type Breakdown (filtered area)</div><div class="cb">161 TOTAL KY</div></div><div class="cw" style="height:200px"><canvas id="fr_parktype"></canvas></div></div>
+  </div>
+</div>
+
+<!-- ════ RAIL ════ -->
+<div class="page" id="page-rail">
+  <div class="kgrid k4">
+    <div class="kpi" style="--kc:#fb923c"><span class="ki">🚂</span><div class="kv" id="rail_total_val">—</div><div class="kl">Active Rail Miles (filtered)</div><div class="kd nu">KYTC</div></div>
+    <div class="kpi" style="--kc:#3b82f6"><span class="ki">📏</span><div class="kv" id="rail_segs_val">—</div><div class="kl">Rail Segments (filtered)</div><div class="kd nu">KYTC</div></div>
+    <div class="kpi" style="--kc:#a78bfa"><span class="ki">🏢</span><div class="kv">10+</div><div class="kl">Railroad Operators</div><div class="kd nu">Statewide</div></div>
+    <div class="kpi" style="--kc:#22c55e"><span class="ki">🌐</span><div class="kv">12</div><div class="kl">KYTC Districts</div><div class="kd nu">All Districts</div></div>
+  </div>
+  <div class="sh">Rail Operators & Network — all charts respond to filter</div>
+  <div class="g g2">
+    <div class="card"><div class="card-h"><div class="ct">Route Miles by Operator</div><div class="cb">KYTC ACTIVE · FILTERED</div></div><div class="cw" style="height:230px"><canvas id="rl_ops"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Class Distribution</div><div class="cb">FILTERED</div></div>
+      <div class="cw" style="height:130px"><canvas id="rl_class"></canvas></div>
+      <div style="margin-top:14px">
+        <div style="margin-bottom:8px;font-size:10px;color:var(--t3);letter-spacing:1px;text-transform:uppercase">Top Operators</div>
+        <span class="op op-csxt">🔵 CSXT — Class I</span>
+        <span class="op op-ns">🟣 NS — Class I</span>
+        <span class="op op-pal">🟢 PAL — Class II</span>
+        <span class="op op-rjc">🟡 RJC — Class III</span>
+        <span class="op op-cn">🟠 CN — Class I</span>
+      </div>
+    </div>
+  </div>
+  <div class="g g2">
+    <div class="card"><div class="card-h"><div class="ct">Segments by Line Type</div><div class="cb">FILTERED</div></div><div class="cw" style="height:210px"><canvas id="rl_type"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Mileage by KYTC District</div><div class="cb">FILTERED</div></div><div class="cw" style="height:210px"><canvas id="rl_district"></canvas></div></div>
+  </div>
+  <div class="sh">Maintenance Facilities<span class="statewide-note" style="margin-left:8px">🌐 Fixed reference</span></div>
+  <div class="card"><div class="card-h"><div class="ct">Rail Maintenance Facility Directory</div><div class="cb">8 ACTIVE</div></div>
+    <table class="tbl"><thead><tr><th>#</th><th>Facility</th><th>City</th><th>County</th><th>Operators</th><th>Services</th></tr></thead>
+    <tbody>
+      <tr><td class="rk">01</td><td class="n">TTX Company CXLK</td><td>Corbin</td><td>Whitley</td><td><span class="tag" style="background:rgba(59,130,246,.15);color:#93c5fd">CSXT</span></td><td>Railcar Repair</td></tr>
+      <tr><td class="rk">02</td><td class="n">Road & Rail Services Inc.</td><td>Lexington</td><td>Fayette</td><td><span class="tag" style="background:rgba(59,130,246,.15);color:#93c5fd">CSXT</span> <span class="tag" style="background:rgba(167,139,250,.15);color:#c4b5fd">NS</span></td><td>Multi-Rail Repair</td></tr>
+      <tr><td class="rk">03</td><td class="n">NRE Paducah</td><td>Paducah</td><td>McCracken</td><td><span class="tag" style="background:rgba(251,191,36,.15);color:#fde68a">BNSF</span> <span class="tag" style="background:rgba(251,146,60,.15);color:#fdba74">CN</span></td><td>Locomotive Rebuild</td></tr>
+      <tr><td class="rk">04</td><td class="n">Progress Rail</td><td>Louisville</td><td>Jefferson</td><td><span class="tag" style="background:rgba(59,130,246,.15);color:#93c5fd">CSXT</span></td><td>Car Repair</td></tr>
+      <tr><td class="rk">05</td><td class="n">GE Transportation</td><td>Elizabethtown</td><td>Hardin</td><td><span class="tag" style="background:rgba(167,139,250,.15);color:#c4b5fd">NS</span></td><td>Engine Overhaul</td></tr>
+      <tr><td class="rk">06</td><td class="n">Watco Companies</td><td>Shelbyville</td><td>Shelby</td><td><span class="tag" style="background:rgba(59,130,246,.15);color:#93c5fd">CSXT</span></td><td>Short Line Maint.</td></tr>
+      <tr><td class="rk">07</td><td class="n">Rail Management</td><td>Covington</td><td>Kenton</td><td><span class="tag" style="background:rgba(167,139,250,.15);color:#c4b5fd">NS</span></td><td>Track / Signal</td></tr>
+      <tr><td class="rk">08</td><td class="n">Louisville Rail Center</td><td>Louisville</td><td>Jefferson</td><td><span class="tag" style="background:rgba(59,130,246,.15);color:#93c5fd">CSXT</span></td><td>Classification Yard</td></tr>
+    </tbody></table>
+  </div>
+</div>
+
+<!-- ════ AVIATION ════ -->
+<div class="page" id="page-aviation">
+  <div class="kgrid k4">
+    <div class="kpi" style="--kc:#a78bfa"><span class="ki">✈️</span><div class="kv" id="apt_total_val">—</div><div class="kl">Airports & Heliports (filtered)</div><div class="kd nu">FAA</div></div>
+    <div class="kpi" style="--kc:#3b82f6"><span class="ki">🗺️</span><div class="kv" id="apt_county_val">—</div><div class="kl">Counties with Aviation</div><div class="kd nu">Filtered</div></div>
+    <div class="kpi" style="--kc:#22d3ee"><span class="ki">📦</span><div class="kv">UPS</div><div class="kl">SDF Worldport Hub<span class="statewide-note">🌐</span></div><div class="kd nu">~2.6M pkg/day</div></div>
+    <div class="kpi" style="--kc:#22c55e"><span class="ki">🛫</span><div class="kv">5.53M</div><div class="kl">Total Enplanements<span class="statewide-note">🌐</span></div><div class="kd nu">FAA 2025</div></div>
+  </div>
+  <div class="sh">Facility Types — responds to county filter</div>
+  <div class="g g3">
+    <div class="card"><div class="card-h"><div class="ct">Type Distribution (filtered)</div><div class="cb">FAA KYTC</div></div><div class="cw" style="height:180px"><canvas id="av_types"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Ownership (filtered)</div><div class="cb">PU/PR/MR</div></div><div class="cw" style="height:180px"><canvas id="av_own"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Enplanements Share<span class="statewide-note">🌐</span></div><div class="cb">FAA T-100 2025</div></div><div class="cw" style="height:180px"><canvas id="av_share"></canvas></div></div>
+  </div>
+  <div class="sh">Major Passenger Airports<span class="statewide-note" style="margin-left:8px">🌐 Statewide</span></div>
+  <div class="g g23">
+    <div class="card"><div class="card-h"><div class="ct">Kentucky Airport Directory</div><div class="cb">FAA T-100 2025</div></div>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <div class="route-card"><div class="rc-top"><span class="rc-name">CVG — Cincinnati/Northern Kentucky Int'l</span><span class="rc-miles">3,246,043 pax</span></div><div class="rc-desc">🌐 Major hub · Boone County · International + domestic</div></div>
+        <div class="route-card"><div class="rc-top"><span class="rc-name">SDF — Louisville Muhammad Ali Int'l</span><span class="rc-miles">1,686,544 pax</span></div><div class="rc-desc">📦 UPS Worldport global air cargo hub · Jefferson County</div></div>
+        <div class="route-card"><div class="rc-top"><span class="rc-name">LEX — Blue Grass Airport</span><span class="rc-miles">593,242 pax</span></div><div class="rc-desc">🏙️ Lexington regional hub · Fayette County</div></div>
+        <div class="route-card"><div class="rc-top"><span class="rc-name">FTK — Campbell Army Airfield</span><span class="rc-miles">6,207 pax</span></div><div class="rc-desc">🪖 Fort Knox military · Hardin County</div></div>
+        <div class="route-card"><div class="rc-top"><span class="rc-name">BWG — Bowling Green-Warren County</span><span class="rc-miles">634 pax</span></div><div class="rc-desc">🏘️ Regional general aviation · Warren County</div></div>
+        <div class="route-card"><div class="rc-top"><span class="rc-name">PAH — Barkley Regional Airport</span><span class="rc-miles">381 pax</span></div><div class="rc-desc">🏘️ Paducah regional · McCracken County</div></div>
+      </div>
+    </div>
+    <div class="card"><div class="card-h"><div class="ct">Enplanements by Airport<span class="statewide-note">🌐</span></div><div class="cb">FAA T-100</div></div><div class="cw" style="height:220px"><canvas id="av_bar"></canvas></div>
+      <div style="margin-top:14px"><div class="slist">
+        <div class="srow" style="--kc:#a78bfa"><span class="sl">📦 SDF Air Freight Capacity</span><span class="sv">~2.6M tons/yr</span></div>
+        <div class="srow" style="--kc:#3b82f6"><span class="sl">✈️ Total KY Enplanements</span><span class="sv">5.53M</span></div>
+        <div class="srow" style="--kc:#22c55e"><span class="sl">🌐 CVG Share of KY Pax</span><span class="sv">58.7%</span></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ WATERWAYS ════ -->
+<div class="page" id="page-waterways">
+  <div class="kgrid k4">
+    <div class="kpi" style="--kc:#22d3ee"><span class="ki">🌊</span><div class="kv">1,590</div><div class="kl">Navigable Waterway Miles<span class="statewide-note">🌐</span></div><div class="kd nu">USACE</div></div>
+    <div class="kpi" style="--kc:#3b82f6"><span class="ki">🏭</span><div class="kv" id="prv_total_val">—</div><div class="kl">Private Port Facilities (filtered)</div><div class="kd nu">KYTC</div></div>
+    <div class="kpi" style="--kc:#22c55e"><span class="ki">🏛️</span><div class="kv" id="pub_total_val">—</div><div class="kl">Public Riverport Authorities (filtered)</div><div class="kd nu">KYTC</div></div>
+    <div class="kpi" style="--kc:#fbbf24"><span class="ki">⛴️</span><div class="kv" id="ferry_total_val">—</div><div class="kl">Ferry Crossing Routes (filtered)</div><div class="kd nu">KYTC</div></div>
+  </div>
+  <div class="sh">Public River Port Authorities — responds to filter</div>
+  <div class="g g2">
+    <div class="card"><div class="card-h"><div class="ct">Public Riverport Directory (filtered)</div><div class="cb">KYTC 2025</div></div>
+      <table class="tbl"><thead><tr><th>#</th><th>Authority</th><th>City</th><th>River</th><th>Status</th><th>FTZ</th></tr></thead><tbody id="pub_ports_tbl"></tbody></table>
+    </div>
+    <div class="card"><div class="card-h"><div class="ct">Principal Port Tonnage<span class="statewide-note">🌐</span></div><div class="cb">USACE 2023</div></div><div class="cw" style="height:240px"><canvas id="wt_ports"></canvas></div></div>
+  </div>
+  <div class="sh">Private Ports & Ferry Routes — responds to filter</div>
+  <div class="g g2">
+    <div class="card"><div class="card-h"><div class="ct">Private Facilities by Waterway (filtered)</div><div class="cb">154 TOTAL KY</div></div><div class="cw" style="height:210px"><canvas id="wt_private"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">State Ferry Crossings (filtered)</div><div class="cb">KYTC 2025</div></div><div id="ferry_list" style="max-height:280px;overflow-y:auto"></div></div>
+  </div>
+</div>
+
+<!-- ════ TRANSIT ════ -->
+<div class="page" id="page-transit">
+  <div class="kgrid k4">
+    <div class="kpi" style="--kc:#22c55e"><span class="ki">🚌</span><div class="kv">13.3M</div><div class="kl">Transit Riders 2024<span class="statewide-note">🌐</span></div><div class="kd up">↑ +43% vs 2021</div></div>
+    <div class="kpi" style="--kc:#3b82f6"><span class="ki">📉</span><div class="kv">−44%</div><div class="kl">COVID Drop 2019→21<span class="statewide-note">🌐</span></div><div class="kd dn">NTD</div></div>
+    <div class="kpi" style="--kc:#fbbf24"><span class="ki">🗺️</span><div class="kv">10</div><div class="kl">MPOs 2025–26<span class="statewide-note">🌐</span></div><div class="kd up">↑ +1 new</div></div>
+    <div class="kpi" style="--kc:#a78bfa"><span class="ki">⛽</span><div class="kv">2.12B</div><div class="kl">Gallons Gas 2023<span class="statewide-note">🌐</span></div><div class="kd nu">FHWA</div></div>
+  </div>
+  <div class="sh">All transit charts are statewide — not affected by district/county filter<span class="statewide-note" style="margin-left:8px">🌐 Statewide</span></div>
+  <div class="g g2">
+    <div class="card"><div class="card-h"><div class="ct">Transit Ridership 2010–2024</div><div class="cb">NTD ANNUAL</div></div><div class="cw" style="height:220px"><canvas id="tr_ride"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Licensed Drivers vs. Registered Vehicles</div><div class="cb">FHWA 2010–2023</div></div><div class="cw" style="height:220px"><canvas id="tr_dveh"></canvas></div></div>
+  </div>
+  <div class="g g32">
+    <div class="card"><div class="card-h"><div class="ct">Highway Gasoline Consumption (K Gallons)</div><div class="cb">FHWA</div></div><div class="cw" style="height:200px"><canvas id="tr_gas"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Personal Travel — NHTS</div><div class="cb">2001 · 2009 · 2017</div></div>
+      <div class="slist" style="margin-top:6px">
+        <div class="srow" style="--kc:#3b82f6"><span class="sl">👤 Persons (2017)</span><span class="sv">26,670K</span></div>
+        <div class="srow" style="--kc:#22c55e"><span class="sl">🔁 Person Trips (2017)</span><span class="sv">35,166M</span></div>
+        <div class="srow" style="--kc:#fbbf24"><span class="sl">📏 Person Miles (2017)</span><span class="sv">393,066M</span></div>
+        <div class="srow" style="--kc:#a78bfa"><span class="sl">👤 Persons (2001)</span><span class="sv">22,158K</span></div>
+        <div class="srow" style="--kc:#22d3ee"><span class="sl">📏 Person Miles (2001)</span><span class="sv">431,928M</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ ACTIVE ════ -->
+<div class="page" id="page-active">
+  <div class="kgrid k4">
+    <div class="kpi" style="--kc:#f472b6"><span class="ki">🚴</span><div class="kv" id="bike_total_val">—</div><div class="kl">Bicycle Route Miles (filtered)</div><div class="kd nu">KYTC</div></div>
+    <div class="kpi" style="--kc:#22d3ee"><span class="ki">🛶</span><div class="kv" id="wt_miles_val">—</div><div class="kl">Blue Water Trail Miles<span class="statewide-note">🌐</span></div><div class="kd nu">KDFWR</div></div>
+    <div class="kpi" style="--kc:#fbbf24"><span class="ki">🅿️</span><div class="kv" id="pk_total_val">—</div><div class="kl">Truck Parking Spaces (filtered)</div><div class="kd nu">KYTC</div></div>
+    <div class="kpi" style="--kc:#22c55e"><span class="ki">🗺️</span><div class="kv" id="bike_segs_val">—</div><div class="kl">Bicycle Segments (filtered)</div><div class="kd nu">KYTC GIS</div></div>
+  </div>
+  <div class="sh">Bicycle Routes — responds to district/county filter</div>
+  <div class="g g2">
+    <div class="card"><div class="card-h"><div class="ct">Miles by Named Route (filtered)</div><div class="cb">9 NAMED ROUTES</div></div><div class="cw" style="height:220px"><canvas id="ac_bike"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Named Routes Directory</div><div class="cb">KYTC 2024</div></div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <div class="route-card"><div class="rc-top"><span class="rc-name">🚴 RRT — River to River Trail</span></div><div class="rc-desc">Daviess, Henderson, Webster, Union, Crittenden</div></div>
+        <div class="route-card"><div class="rc-top"><span class="rc-name">🚴 MKT — Midland Knobs Trail</span></div><div class="rc-desc">Marion, Nelson, Washington, LaRue</div></div>
+        <div class="route-card"><div class="rc-top"><span class="rc-name">🚴 BGT — Bluegrass Trail</span></div><div class="rc-desc">Madison, Clark, Bourbon, Scott, Woodford</div></div>
+        <div class="route-card"><div class="rc-top"><span class="rc-name">🚴 SLT — Sheltowee Trace Trail</span></div><div class="rc-desc">Whitley, McCreary, Wayne, Russell</div></div>
+        <div class="route-card"><div class="rc-top"><span class="rc-name">🚴 KTT / UGR / CHT / MCT / MRT</span></div><div class="rc-desc">Statewide network — 5 additional named routes</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sh">Blue Water Trails<span class="statewide-note" style="margin-left:8px">🌐 Statewide — KDFWR has no county column</span></div>
+  <div class="g g2">
+    <div class="card"><div class="card-h"><div class="ct">Top 15 Trails by Miles</div><div class="cb">37 TOTAL · <span id="wt_total_val">—</span> TRAILS · KDFWR</div></div><div class="cw" style="height:250px"><canvas id="ac_water"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Featured Water Trails</div><div class="cb">TOP BY MILES</div></div>
+      <div style="display:flex;flex-direction:column;gap:5px;overflow-y:auto;max-height:300px">
+        <div class="wcard"><div class="wc-name">Big South Fork</div><div class="wc-mi">52.9 miles · McCreary County</div></div>
+        <div class="wcard"><div class="wc-name">Rockcastle River</div><div class="wc-mi">42.2 miles · Laurel/Rockcastle</div></div>
+        <div class="wcard"><div class="wc-name">Slate Creek</div><div class="wc-mi">36.1 miles · Elliott County</div></div>
+        <div class="wcard"><div class="wc-name">Gasper River</div><div class="wc-mi">31.6 miles · Warren/Butler County</div></div>
+        <div class="wcard"><div class="wc-name">South Fork Licking River</div><div class="wc-mi">29.9 miles · Harrison/Bourbon</div></div>
+        <div class="wcard"><div class="wc-name">Green River — Mammoth Cave NP</div><div class="wc-mi">19.7 miles · Edmonson County</div></div>
+        <div class="wcard"><div class="wc-name">Licking River</div><div class="wc-mi">25.4 miles · Rowan/Bath County</div></div>
+        <div class="wcard"><div class="wc-name">Upper Green River</div><div class="wc-mi">25.7 miles · Green County</div></div>
+        <div class="wcard"><div class="wc-name">Elkhorn Creek</div><div class="wc-mi">19.3 miles · Scott/Franklin</div></div>
+        <div class="wcard"><div class="wc-name">Cumberland River Tailwater</div><div class="wc-mi">15.9 miles · Pulaski County</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ COMMUTE ════ -->
+<div class="page" id="page-commute">
+  <div class="kgrid k4">
+    <div class="kpi" style="--kc:#3b82f6"><span class="ki">🚗</span><div class="kv">79.8%</div><div class="kl">Drive Alone 2024<span class="statewide-note">🌐</span></div><div class="kd dn">↓ from 2018</div></div>
+    <div class="kpi" style="--kc:#22c55e"><span class="ki">🏠</span><div class="kv">197K</div><div class="kl">Work From Home 2024<span class="statewide-note">🌐</span></div><div class="kd up">↑ +147%</div></div>
+    <div class="kpi" style="--kc:#fbbf24"><span class="ki">👥</span><div class="kv">206K</div><div class="kl">Carpooling 2024<span class="statewide-note">🌐</span></div><div class="kd up">↑ +12%</div></div>
+    <div class="kpi" style="--kc:#fb923c"><span class="ki">🚌</span><div class="kv">13.2K</div><div class="kl">Public Transit 2024<span class="statewide-note">🌐</span></div><div class="kd dn">↓ −32%</div></div>
+  </div>
+  <div class="sh">All commute charts are statewide — ACS data has no district/county column<span class="statewide-note" style="margin-left:8px">🌐 Statewide</span></div>
+  <div class="g g2">
+    <div class="card"><div class="card-h"><div class="ct">Mode Trends 2018–2024</div><div class="cb">ACS</div></div><div class="cw" style="height:250px"><canvas id="cm_lines"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">2024 Mode Share</div><div class="cb">ACS 2024</div></div><div class="cw" style="height:250px"><canvas id="cm_donut"></canvas></div></div>
+  </div>
+  <div class="card"><div class="card-h"><div class="ct">Grouped Bar — 5 Major Modes</div><div class="cb">ACS 2018–2024</div></div><div class="cw" style="height:210px"><canvas id="cm_bar"></canvas></div></div>
+</div>
+
+<!-- ════ SAFETY ════ -->
+<div class="page" id="page-safety">
+  <div class="kgrid k5">
+    <div class="kpi" style="--kc:#f87171"><span class="ki">💀</span><div class="kv">814</div><div class="kl">Fatalities 2023<span class="statewide-note">🌐</span></div><div class="kd dn">↑ +30% vs 2013</div></div>
+    <div class="kpi" style="--kc:#fb923c"><span class="ki">🚨</span><div class="kv">767</div><div class="kl">Fatal Crashes 2023<span class="statewide-note">🌐</span></div><div class="kd dn">KSP</div></div>
+    <div class="kpi" style="--kc:#fbbf24"><span class="ki">🍺</span><div class="kv">177</div><div class="kl">Alcohol Deaths 2023<span class="statewide-note">🌐</span></div><div class="kd dn">21.7%</div></div>
+    <div class="kpi" style="--kc:#a78bfa"><span class="ki">🏆</span><div class="kv">919</div><div class="kl">Peak Fatalities 2021<span class="statewide-note">🌐</span></div><div class="kd dn">COVID</div></div>
+    <div class="kpi" style="--kc:#f87171"><span class="ki">💵</span><div class="kv">$33.5B</div><div class="kl">Economic Cost 2023<span class="statewide-note">🌐</span></div><div class="kd dn">TRIP</div></div>
+  </div>
+  <div class="sh">All safety charts are statewide — NHTSA FARS / FHWA<span class="statewide-note" style="margin-left:8px">🌐 Statewide</span></div>
+  <div class="g g2">
+    <div class="card"><div class="card-h"><div class="ct">Traffic Fatalities 2010–2023</div><div class="cb">NHTSA FARS · FHWA</div></div><div class="cw" style="height:240px"><canvas id="sf_trend"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Fatality Rate — KY vs. US per 100M VMT</div><div class="cb">FHWA / NHTSA</div></div><div class="cw" style="height:240px"><canvas id="sf_rate"></canvas></div></div>
+  </div>
+  <div class="g g32">
+    <div class="card"><div class="card-h"><div class="ct">2023 Fatalities by Cause</div><div class="cb">KSP CRASH FACTS</div></div><div class="cw" style="height:230px"><canvas id="sf_cause"></canvas></div></div>
+    <div class="card"><div class="card-h"><div class="ct">Key Safety Indicators</div><div class="cb">2023</div></div>
+      <div class="slist">
+        <div class="srow" style="--kc:#f87171"><span class="sl">💀 Total Fatalities</span><span class="sv">814</span></div>
+        <div class="srow" style="--kc:#fb923c"><span class="sl">🍺 Alcohol-Related</span><span class="sv">177 (21.7%)</span></div>
+        <div class="srow" style="--kc:#fbbf24"><span class="sl">💨 Speed-Related</span><span class="sv">229 (28.1%)</span></div>
+        <div class="srow" style="--kc:#a78bfa"><span class="sl">📱 Distracted Driving</span><span class="sv">98 (12.0%)</span></div>
+        <div class="srow" style="--kc:#f87171"><span class="sl">🛣️ Run-Off-Road (% fatal)</span><span class="sv">41.6%</span></div>
+        <div class="srow" style="--kc:#22d3ee"><span class="sl">🏗️ Work Zone Deaths 19–23</span><span class="sv">58</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="srcbar"><b>Sources:</b> NHTSA FARS 2023 · KSP Crash Facts 2023 · FHWA VMT Data · TRIP National Safety Report 2024</div>
+</div>
+
+</main>
+</div><!-- /dashboard -->
+
+<!-- JS modules in dependency order -->
+<script src="js/config.js"></script>
+<script src="js/loader.js"></script>
+<script src="js/geo.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
